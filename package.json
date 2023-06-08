@@ -1,0 +1,21 @@
+{
+  "name": "busy.honeymachine.io",
+  "version": "0.1.0",
+  "description": "A collection of coding experiments",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/artificialhoney/busy.honeymachine.io.git"
+  },
+  "author": "Sebastian Krüger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/artificialhoney/busy.honeymachine.io/issues"
+  },
+  "homepage": "https://github.com/artificialhoney/busy.honeymachine.io#readme"
+}

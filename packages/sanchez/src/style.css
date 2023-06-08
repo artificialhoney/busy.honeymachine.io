@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  margin: 0;
+  background: black;
+}
+
+video {
+  --width: 100%;
+  width: var(--width);
+  height: calc(var(--width) * 0.75);
+}

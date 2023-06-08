@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sanchez</title>
+  </head>
+  <body>
+    <div class="container mx-auto max-w-lg">
+      <div class="px-4">
+        <div class="flex grid grid-cols-3 py-8 gap-5">
+          <div>
+            <label
+              for="bigotes"
+              class="block mb-2 text-sm font-medium text-white"
+              >Bigote</label
+            >
+            <select
+              id="bigotes"
+              class="appearance-none bg-white/25 border border-purple-500 text-white text-sm rounded-lg ring-purple-500 focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5"
+            >
+              <option selected value="0">Hidalgo</option>
+              <option value="1">Torero</option>
+              <option value="2">Artista</option>
+            </select>
+          </div>
+          <div>
+            <label
+              for="dimension"
+              class="block mb-2 text-sm font-medium text-white"
+              >Dimensión</label
+            >
+            <input
+              id="dimension"
+              type="range"
+              value="1"
+              step="0.1"
+              min="1"
+              max="2"
+              class="w-full h-10 appearance-none bg-transparent [&::-webkit-slider-runnable-track]:rounded-full [&::-webkit-slider-runnable-track]:bg-white/25 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-purple-500"
+            />
+          </div>
+          <div class="flex items-end">
+            <a id="download" download="sanchez.png" class="w-full">
+              <button
+                id="save"
+                class="text-md bg-purple-500 hover:bg-purple-700 text-white font-bold py-3 w-full border border-purple-700 rounded-xl uppercase"
+              >
+                Grabar
+              </button>
+            </a>
+          </div>
+        </div>
+        <div class="w-full relative" id="canvas-container">
+          <video id="video" autoplay loop muted playsinline class="absolute max-w-full h-auto"></video>
+          <canvas id="canvas" class="absolute"></canvas>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
