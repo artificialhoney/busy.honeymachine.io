@@ -1,12 +1,12 @@
 {
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended"],
+  "parser": "@typescript-eslint/parser",
   "root": true,
-  "ignorePatterns": ["**/*"],
-  "plugins": ["simple-import-sort", "unused-imports"],
+  "plugins": ["@typescript-eslint", "simple-import-sort", "unused-imports"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "no-unused-vars": "off", // or "@typescript-eslint/no-unused-vars": "off",
         "unused-imports/no-unused-imports": "error",
         "unused-imports/no-unused-vars": [
           "warn",
@@ -18,20 +18,7 @@
           }
         ],
         "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error",
-        "@nrwl/nx/enforce-module-boundaries": [
-          "error",
-          {
-            "enforceBuildableLibDependency": true,
-            "allow": [],
-            "depConstraints": [
-              {
-                "sourceTag": "*",
-                "onlyDependOnLibsWithTags": ["*"]
-              }
-            ]
-          }
-        ]
+        "simple-import-sort/exports": "error"
       }
     },
     {

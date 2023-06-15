@@ -1,11 +1,10 @@
-import vue from '@vitejs/plugin-vue'
 import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  assetsInclude: ['assets/**/*.mp3'],
   base: './',
   build: {
-    outDir: '../../dist/fade-to-black',
+    outDir: '../../dist/house-keeping',
   },
 })

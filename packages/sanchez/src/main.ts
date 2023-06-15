@@ -1,38 +1,41 @@
-import * as blazeface from '@tensorflow-models/blazeface';
-import '@tensorflow/tfjs-backend-webgl';
-import bigote1 from '../assets/bigotes/bigote1.svg';
-import bigote2 from '../assets/bigotes/bigote2.svg';
-import bigote3 from '../assets/bigotes/bigote3.svg';
-import './style.css';
+import '@tensorflow/tfjs-backend-webgl'
+import './style.css'
 
-let video = document.getElementById('video') as HTMLVideoElement;
-let model: any;
-let canvas = document.getElementById('canvas') as HTMLCanvasElement;
-let ctx = canvas.getContext('2d')!;
+import * as blazeface from '@tensorflow-models/blazeface'
+
+import bigote1 from '../assets/bigotes/bigote1.svg'
+import bigote2 from '../assets/bigotes/bigote2.svg'
+import bigote3 from '../assets/bigotes/bigote3.svg'
+
+const video = document.getElementById('video') as HTMLVideoElement
+let model: any
+const canvas = document.getElementById('canvas') as HTMLCanvasElement
+const ctx = canvas.getContext('2d')!
 
 const accessCamera = () => {
-  const container = document.getElementById(
-    'canvas-container');
+  const container = document.getElementById('canvas-container')
   return navigator.mediaDevices
     .getUserMedia({
       video: {
         width: container!.offsetWidth,
-        height: window.matchMedia("(orientation: portrait)").matches ? container!.offsetWidth * 4/3 : container!.offsetWidth * 3/4
+        height: window.matchMedia('(orientation: portrait)').matches
+          ? (container!.offsetWidth * 4) / 3
+          : (container!.offsetWidth * 3) / 4,
       },
       audio: false,
     })
     .then((stream) => {
-      video.srcObject = stream;
-    });
-};
+      video.srcObject = stream
+    })
+}
 
 const resizeCanvas = () => {
-  const container = document.getElementById(
-    'canvas-container'
-  ) as HTMLDivElement;
-  canvas.width = container.offsetWidth;
-  canvas.height = window.matchMedia("(orientation: portrait)").matches ? container!.offsetWidth * 4/3 : container!.offsetWidth * 3/4;
-};
+  const container = document.getElementById('canvas-container') as HTMLDivElement
+  canvas.width = container.offsetWidth
+  canvas.height = window.matchMedia('(orientation: portrait)').matches
+    ? (container!.offsetWidth * 4) / 3
+    : (container!.offsetWidth * 3) / 4
+}
 
 const bigotes = [
   {
@@ -51,45 +54,45 @@ const bigotes = [
     offset: -0.5,
   },
 ].map((b) => {
-  const img = new Image();
-  img.src = b.src;
+  const img = new Image()
+  img.src = b.src
   return {
     ...b,
     img,
-  };
-});
+  }
+})
 
-let index = 0;
-let dimension = 1;
+let index = 0
+let dimension = 1
 
 const detectFaces = async () => {
-  let predictions;
+  let predictions
   try {
-    predictions = await model.estimateFaces(video, false);
+    predictions = await model.estimateFaces(video, false)
   } catch (e) {
-    return;
+    return
   }
 
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
 
   predictions.forEach((prediction: any) => {
-    const bigote = bigotes[index];
-    const nose = prediction.landmarks[2];
-    const mouth = prediction.landmarks[3];
-    const width = prediction.landmarks[1][0] - prediction.landmarks[0][0];
-    var imgW = bigote.img.naturalWidth,
-      imgH = bigote.img.naturalHeight;
+    const bigote = bigotes[index]
+    const nose = prediction.landmarks[2]
+    const mouth = prediction.landmarks[3]
+    const width = prediction.landmarks[1][0] - prediction.landmarks[0][0]
+    const imgW = bigote.img.naturalWidth,
+      imgH = bigote.img.naturalHeight
 
-    var ratio = (width / imgW) * bigote.scale * dimension;
+    const ratio = (width / imgW) * bigote.scale * dimension
 
-    ctx.globalAlpha = 0.8;
+    ctx.globalAlpha = 0.8
     // const x = mouth[0] - nose[0];
     // const y = mouth[1] - nose[1];
     // const degrees = Math.atan2(-y, x);
-    const centerX = (nose[0] + mouth[0]) / 2;
-    const centerY = (nose[1] + mouth[1]) / 2;
-    ctx.save();
-    ctx.translate(centerX, centerY);
+    const centerX = (nose[0] + mouth[0]) / 2
+    const centerY = (nose[1] + mouth[1]) / 2
+    ctx.save()
+    ctx.translate(centerX, centerY)
     // ctx.rotate(-degrees - Math.PI / 2);
     ctx.drawImage(
       bigote.img,
@@ -97,55 +100,47 @@ const detectFaces = async () => {
       -(imgH * ratio) / 2 + ((imgH * ratio) / 2) * bigote.offset,
       imgW * ratio,
       imgH * ratio
-    );
-    ctx.restore();
-  });
-};
+    )
+    ctx.restore()
+  })
+}
 
 const ui = () => {
-  const select = document.getElementById('bigotes') as HTMLSelectElement;
-  select.addEventListener(
-    'change',
-    (ev) => (index = +(ev.target! as HTMLSelectElement).value)
-  );
-  const slider = document.getElementById('dimension') as HTMLInputElement;
-  slider.addEventListener(
-    'change',
-    (ev) => (dimension = +(ev.target! as HTMLInputElement).value)
-  );
-  const save = document.getElementById('save');
+  const select = document.getElementById('bigotes') as HTMLSelectElement
+  select.addEventListener('change', (ev) => (index = +(ev.target! as HTMLSelectElement).value))
+  const slider = document.getElementById('dimension') as HTMLInputElement
+  slider.addEventListener('change', (ev) => (dimension = +(ev.target! as HTMLInputElement).value))
+  const save = document.getElementById('save')
   save!.addEventListener('click', () => {
-    const download = document.getElementById('download');
-    const image = canvas
-      .toDataURL('image/png')
-      .replace('image/png', 'image/octet-stream');
-    download!.setAttribute('href', image);
-  });
-};
+    const download = document.getElementById('download')
+    const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream')
+    download!.setAttribute('href', image)
+  })
+}
 
-let interval: any;
+let interval: any
 const start = async () => {
-  model = await blazeface.load();
-  interval = setInterval(detectFaces, 40);
-};
+  model = await blazeface.load()
+  interval = setInterval(detectFaces, 40)
+}
 
-video.addEventListener('loadeddata', start);
+video.addEventListener('loadeddata', start)
 
 window.addEventListener(
   'resize',
   async () => {
-    clearInterval(interval);
-    await accessCamera();
-    resizeCanvas();
-    interval = setInterval(detectFaces, 40);
+    clearInterval(interval)
+    await accessCamera()
+    resizeCanvas()
+    interval = setInterval(detectFaces, 40)
   },
   false
-);
+)
 
 const init = async () => {
-  await accessCamera();
-  resizeCanvas();
-  ui();
-};
+  await accessCamera()
+  resizeCanvas()
+  ui()
+}
 
-init();
+init()
